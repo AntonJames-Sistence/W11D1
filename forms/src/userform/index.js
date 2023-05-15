@@ -50,6 +50,7 @@ const UserForm = () => {
             errors.bio = 'Limit for bio is 280 characters';
             setFail('bio');
         }
+
         return errors;
     }
 
@@ -114,7 +115,7 @@ const UserForm = () => {
 
         if (!!errors) {
             setErrorMessages(errors);
-            debugger
+            // debugger
         } else {
             let user = {
                 name,
@@ -163,19 +164,21 @@ const UserForm = () => {
                 <label id='name'>Name:
                     <input type="text" placeholder="Name" value={name} onChange={handleChange('name')} />
                 </label>
-                {errorMessages[name] && <li>{errorMessages[name]}</li>}
+                {errorMessages.name && <li>{errorMessages.name}</li>}
 
                 <br />
 
                 <label id='email'>Email:
                     <input type="text" placeholder="Email" value={email} onChange={handleChange('email')} />
                 </label>
+                {errorMessages.email && <li>{errorMessages.email}</li>}
 
                 <br />
 
                 <label id='phone-num'>Phone Number:
                     <input type="text" placeholder="212-345-6677" value={phone} onChange={handleChange('phone')} />
                 </label>
+                {errorMessages.phoneNum && <li>{errorMessages.phoneNum}</li>}
 
                 <br />
 
@@ -187,9 +190,10 @@ const UserForm = () => {
                         <option value="mobile">Mobile</option>
                     </select>
                 </label>
+                {errorMessages.phoneType && <li>{errorMessages.phoneType}</li>}
 
                 <br />
-                <div id='staf'>
+                <div id='staff'>
                     <label>
                         <input
                             type="radio"
@@ -215,6 +219,7 @@ const UserForm = () => {
                 <label id='bio'>Bio:
                     <textarea placeholder="Limit 280 characters" value={bio} onChange={handleChange('bio')} />
                 </label>
+                {errorMessages.bio && <li>{errorMessages.bio}</li>}
 
                 <br />
                 <label id='sign'>Sign Up: 
