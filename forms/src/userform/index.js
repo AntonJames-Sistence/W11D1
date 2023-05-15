@@ -12,40 +12,58 @@ const UserForm = () => {
     const [signUp, setSignUp] = useState(true);
 
     // errors array holder
-    const [errorMessages, setErrorMessages] = useState([]);
+    const [errorMessages, setErrorMessages] = useState({});
 
     const validate = () => {
         // test const option
-        let errors = [];
+        let errors = {};
         // nice regexp use, need to be tested
         let emailFormat = /^[a-z0-9]+\@[a-z]+\.[a-z]{2,3}$/;
-        let phoneFormat = /^\+[0-9]{11}$/;
+        let phoneFormat = /^[0-9]{3}\-[0-9]{3}\-[0-9]{4}$/;
 
         // name validation
         if (name.length === 0) {
-            errors.push('Name can not be blank ;(');
+            errors.name = 'Name can not be blank🧙';
+            setFail('name');
         }
 
         // email validation
         if (emailFormat.test(email) === false || email.length === 0) {
-            errors.push('Email is not valid');
+            errors.email = 'Email is not valid';
+            setFail('email');
         }
 
         // phone and phone type validations
         if (phone.length > 0) {
             if (phoneFormat.test(phone) === false) {
-                errors.push('Please provide valid phone number +(country code) 1233456789')
+                errors.phoneNum = 'Please provide valid phone number +(country code) 1233456789';
+                setFail('phone-num');
             }
             if (phoneType === '') {
-                errors.push('Please select a phone type.');
+                errors.phoneType = 'Please select a phone type.';
+                setFail('phone-type');
             }
         }
 
         // bio validation
         if (bio.length > 280) {
-            errors.push('Limit for bio is 280 characters');
+            errors.bio = 'Limit for bio is 280 characters';
+            setFail('bio');
         }
         return errors;
+    }
+
+    const setFail = (classId) => {
+        let name = document.getElementById(classId);
+        name.className = 'fail';
+    }
+
+    const removeFail = () => {
+        document.getElementById('name').classList.remove('fail');
+        document.getElementById('email').classList.remove('fail');
+        document.getElementById('phone-num').classList.remove('fail');
+        document.getElementById('phone-type').classList.remove('fail');
+        document.getElementById('bio').classList.remove('fail');
     }
 
     const handleChange = field => {
@@ -71,7 +89,7 @@ const UserForm = () => {
                     break;
                 case "signUp":
                     setSignUp( (prevState) => {
-                        // debugger
+
                         return !prevState
                         // if (prevState === true) {
                         //     setSignUp(false);     
@@ -90,10 +108,13 @@ const UserForm = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
+        removeFail('name');
         let errors = validate();
+        
 
-        if (errors.length > 0) {
+        if (!!errors) {
             setErrorMessages(errors);
+            debugger
         } else {
             let user = {
                 name,
@@ -119,46 +140,47 @@ const UserForm = () => {
         }
     }
 
-    const showErrors = () => {
-        if (errorMessages.length === 0) {
-            return null;
-        }
-        else {
-            return (
-                <ul>
-                    {
-                        errorMessages.map((error, i) => (
-                            <li key={i}>{error}</li>
-                        ))
-                    }
-                </ul>
-            )
-        }
-    }
+    // const showErrors = () => {
+    //     if (errorMessages.length === 0) {
+    //         return null;
+    //     }
+    //     else {
+    //         return (
+    //             <ul>
+    //                 {
+    //                     errorMessages.map((error) => (
+    //                         <li>{error}</li>
+    //                     ))
+    //                 }
+    //             </ul>
+    //         )
+    //     }
+    // }
 
     return (
         <>
             <form className="userForm" onSubmit={handleSubmit}>
-                <label>Name:
+                <label id='name'>Name:
                     <input type="text" placeholder="Name" value={name} onChange={handleChange('name')} />
                 </label>
+                {errorMessages[name] && <li>{errorMessages[name]}</li>}
 
                 <br />
 
-                <label>Email:
+                <label id='email'>Email:
                     <input type="text" placeholder="Email" value={email} onChange={handleChange('email')} />
                 </label>
 
                 <br />
 
-                <label>Phone Number:
-                    <input type="text" placeholder="Phone Num: +17180008888" value={phone} onChange={handleChange('phone')} />
+                <label id='phone-num'>Phone Number:
+                    <input type="text" placeholder="212-345-6677" value={phone} onChange={handleChange('phone')} />
                 </label>
 
                 <br />
 
-                <label>Phone Type:
-                    <select value={phoneType} onChange={handleChange('phoneType')}>
+                <label id='phone-type'>Phone Type:
+                    <select disabled={phone.length === 0} value={phoneType} onChange={handleChange('phoneType')}>
                         <option value="">-- Select --</option>
                         <option value="home">Home</option>
                         <option value="work">Work</option>
@@ -167,7 +189,7 @@ const UserForm = () => {
                 </label>
 
                 <br />
-                <div>
+                <div id='staf'>
                     <label>
                         <input
                             type="radio"
@@ -190,16 +212,16 @@ const UserForm = () => {
                 </div>
 
                 <br />
-                <label>Bio:
+                <label id='bio'>Bio:
                     <textarea placeholder="Limit 280 characters" value={bio} onChange={handleChange('bio')} />
                 </label>
 
                 <br />
-                <label>Sign Up: 
+                <label id='sign'>Sign Up: 
                     <input
                     type="checkbox"
-                    value={signUp}
-                    checked={signUp === true}
+                    // value={signUp}
+                    checked={signUp}
                     onChange={handleChange('signUp')} />
                 </label>
 
@@ -207,7 +229,7 @@ const UserForm = () => {
 
                 <button>Submit</button>
             </form>
-            {showErrors()}
+            {/* {showErrors()} */}
         </>
     )
 
