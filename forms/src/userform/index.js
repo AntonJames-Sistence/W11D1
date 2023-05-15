@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import "./userForm.css"
 
 const UserForm = () => {
     // form fields
@@ -70,12 +71,13 @@ const UserForm = () => {
                     break;
                 case "signUp":
                     setSignUp( (prevState) => {
-                        debugger
-                        if (prevState === true) {
-                            setSignUp(false);     
-                        } else {
-                            setSignUp(true);
-                        }
+                        // debugger
+                        return !prevState
+                        // if (prevState === true) {
+                        //     setSignUp(false);     
+                        // } else {
+                        //     setSignUp(true);
+                        // }
                         
                     });
                     break;
@@ -189,7 +191,7 @@ const UserForm = () => {
 
                 <br />
                 <label>Bio:
-                    <textarea placeholder="Bio limit 280 characters" value={bio} onChange={handleChange('bio')} />
+                    <textarea placeholder="Limit 280 characters" value={bio} onChange={handleChange('bio')} />
                 </label>
 
                 <br />
@@ -198,7 +200,7 @@ const UserForm = () => {
                     type="checkbox"
                     value={signUp}
                     checked={signUp === true}
-                    onClick={handleChange('signUp')} />
+                    onChange={handleChange('signUp')} />
                 </label>
 
                 <br />
